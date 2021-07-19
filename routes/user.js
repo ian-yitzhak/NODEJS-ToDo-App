@@ -3,12 +3,18 @@ const Data = require('../models/user')
 
 const router = express.Router()
 
+//get for register
+
+router.get('/register', (req,res)=>{
+	res.render('new')
+})
+
 //getting all Data
 router.get('/',async (req,res)=>{
 	try{
 
 		const data= await Data.find({})
-		res.send(data)
+		res.render('index', {data: data })
 	} catch(err){
 		res.status(500).send(err) }
 
@@ -33,48 +39,87 @@ router.get('/:id', async (req,res)=>{
 
 //create new Data
 
-router.post('/', async (req,res)=>{
+router.post('/register', async (req,res)=>{
 
-	const data = new Data(req.body)
+	const data = new Data({
+		name: req.body.name,
+		email: req.body.email,
+		number: req.body.number
+	})
 
 	try{
 
-		await data.save()
-		res.status(201).send(data)
+		const savedData = await data.save()
+		res.redirect('/')
 	}
 	catch(err){
 
-		res.status(400).send(err)}
+		res.status(400).send(err) }
 })
 
 //UPDATE USER
 
-router.patch('/:id', async (req,res)=>{
-	let body = req.body
-	let id = req.params.id
+// router.patch('/:id', async (req,res)=>{
+// 	let body = req.body
+// 	let id = req.params.id
+
+// 	try{
+
+// 		const data  = await Data.findByIdAndUpdate(id, body)
+// 		res.send(data)
+// 	}catch(err){
+// 		res.status(422).send(err)
+// 	}
+
+// })
+
+router.patch('/:id', async(req,res)=>{
+
+	req.data = await Data.findById(req.params.id);
+	let data = req.data;
+
+	data.name = req.body.name
+	data.email = req.body.email
+	data.number = req.body.number
 
 	try{
+		data = await data.save()
+		res.redirect('/')
 
-		const data  = await Data.findByIdAndUpdate(id, body)
-		res.send(data)
-	}catch(err){
-		res.status(422).send(err)
+	}catch(e){
+		res.send(e)
 	}
 
+
+
+
+})
+
+// get by id and edit
+
+
+router.get('/edit/:id' , async (req,res)=>{
+	const data = await Data.findById(req.params.id)
+	res.render('edit', {data : data })
 })
 
 //DELETE USER
 
-router.delete('/:id', async (req,res)=>{
-	try{
-		const data = await Data.findByIdAndDelete(req.params.id)
-		if(!person){
-			res.status(404).send()
-		}res.send(data)
-	}catch(err){
-		res.status(500).send()
-	}
+// router.delete('/:id', async (req,res)=>{
+// 	try{
+// 		const data = await Data.findByIdAndDelete(req.params.id)
+// 		if(!data){
+// 			res.status(404).send('no user')
+// 		}res.redirect('/')
+// 	}catch(err){
+// 		res.status(500).send('error')
+// 	}
 
+// })
+
+router.delete('/:id',  async (req, res) => {
+  await Data.findByIdAndDelete(req.params.id)
+  res.redirect('/')
 })
 
 module.exports = router

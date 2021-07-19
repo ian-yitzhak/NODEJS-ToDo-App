@@ -3,7 +3,15 @@ const Data = require('../models/user')
 
 const router = express.Router()
 
-router.get('/', (req,res)=>{
-	res.render('index')
-})
+//getting all Data
+router.get('/',async (req,res)=>{
+	try{
+
+		const data= await Data.find({})
+		res.render('index', {data: data })
+	} catch(err){
+		res.status(500).send(err) }
+
+	})
+
 module.exports = router

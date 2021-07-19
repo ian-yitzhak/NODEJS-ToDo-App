@@ -9,6 +9,10 @@ const dataSchema = new mongoose.Schema({
     email:{
         type: String,
         required: true
+    },
+    number:{
+        type: String,
+        required: true
     }
 })
 

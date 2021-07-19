@@ -1,3 +1,8 @@
+
+<hr>
+
+<div class="text-center"> <a href="/api/register" class="btn btn-info">REGISTER</a></div>
+<hr>
 <table class="table">
   <thead class="black white-text">
     <tr>
@@ -10,30 +15,21 @@
     </tr>
   </thead>
   <tbody>
+  <% data.forEach(data => { %> 
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td><button type="button" class="btn btn-danger">DELETE</button></td>
-      <td><button type="button" class="btn btn-info">EDIT</button></td>
+      <th scope="row">#</th>
+      <td><%= data.name %></td>
+      <td><%= data.email %></td>
+      <td><%= data.number %></td>
+
+       <form action="/api/<%= data.id %>?_method=DELETE" method="POST" class="d-inline">
+      <td><button type="submit"  onclick="click_me()"  class="btn btn-danger">DELETE</button></td>
+      </form>
+
+      <td><a href="/api/edit/<%= data.id %>" class="btn btn-info">EDIT</a></td>
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td><button type="button" class="btn btn-danger">DELETE</button></td>
-      <td><button type="button" class="btn btn-info">EDIT</button></td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td><button type="button" class="btn btn-danger">DELETE</button></td>
-      <td><button type="button" class="btn btn-info">EDIT</button></td>
-    </tr>
+    <% }) %>
+    
   </tbody>
 </table>
 
